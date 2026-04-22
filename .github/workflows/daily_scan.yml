@@ -25,10 +25,18 @@ jobs:
       - name: Run Sniper
         run: python global_sniper.py
 
+      - name: Generate Directory Index
+        run: |
+          echo "<html><body><h1>Trailer Index</h1><ul>" > index.html
+          for f in PreShow_Trailers/*.strm; do
+            echo "<li><a href=\"$f\">$(basename "$f")</a></li>" >> index.html
+          done
+          echo "</ul></body></html>" >> index.html
+
       - name: Commit & Push Changes
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add .
-          git commit -m "Robot: Added fresh trailers" || exit 0
+          git commit -m "Robot: Updated trailer index for Kodi" || exit 0
           git push
